@@ -7,7 +7,7 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-TOKEN = os.getenv("BOT_TOKEN", "ТВОЙ_ТОКЕН")
+TOKEN = os.getenv("8625418202:AAGqxrkLwIrSuTgWCk0cCJ1yxIvIOJreTQM", "8625418202:AAGqxrkLwIrSuTgWCk0cCJ1yxIvIOJreTQM")
 ADMIN_ID = 7570922005
 CARD_NUMBER = "2200701233887170"
 STAR_PRICE = 1.48
