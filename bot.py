@@ -14,7 +14,7 @@ from aiogram.fsm.state import State, StatesGroup
 logging.basicConfig(level=logging.INFO)
 
 # Задавайте токен через переменную окружения BOT_TOKEN, не храните его в коде.
-TOKEN = os.getenv("8625418202:AAGqxrkLwIrSuTgWCk0cCJ1yxIvIOJreTQM", "8625418202:AAGqxrkLwIrSuTgWCk0cCJ1yxIvIOJreTQM")
+TOKEN = os.getenv("8625418202:AAHlq3Rz_nUNEQ25d1iw83TE3OpxppA8U1U", "8625418202:AAHlq3Rz_nUNEQ25d1iw83TE3OpxppA8U1U")
 ADMIN_ID = 7570922005
 CARD_NUMBER = "2200701233887170"
 STAR_PRICE = 1.48
