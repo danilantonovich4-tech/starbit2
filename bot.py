@@ -5,7 +5,8 @@ import json
 import logging
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import (
-    Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
+    Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton,
+    ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove, WebAppInfo
 )
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -37,9 +38,15 @@ class ReceiptState(StatesGroup):
 
 
 def get_main_menu():
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="⭐️ Купить звезды Telegram", web_app=WebAppInfo(url=WEBAPP_URL))]
-    ])
+    # ВАЖНО: sendData() из мини-аппа работает только у кнопки в обычной
+    # (Reply) клавиатуре — у инлайн-кнопки в сообщении web_app данные
+    # до бота не долетают.
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="⭐️ Купить звезды Telegram", web_app=WebAppInfo(url=WEBAPP_URL))]
+        ],
+        resize_keyboard=True
+    )
 
 
 def get_cancel_menu():
@@ -78,12 +85,18 @@ async def cmd_start(message: Message, state: FSMContext):
 @dp.callback_query(F.data == "back_to_main")
 async def go_back(call: CallbackQuery, state: FSMContext):
     await state.clear()
-    await call.message.edit_text("Главное меню 🟣:", reply_markup=get_main_menu())
+    await call.message.edit_text("Главное меню 🟣")
+    await bot.send_message(
+        chat_id=call.from_user.id,
+        text="Нажми на кнопку ниже, чтобы выбрать количество звёзд.",
+        reply_markup=get_main_menu()
+    )
 
 
 @dp.message(F.web_app_data)
 async def process_webapp_order(message: Message, state: FSMContext):
     """Заказ, пришедший из мини-приложения (index.html)."""
+    logging.info("Получены данные из web app: %s", message.web_app_data.data)
     try:
         data = json.loads(message.web_app_data.data)
     except (ValueError, AttributeError):
